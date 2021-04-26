@@ -30,6 +30,11 @@ import com.googlecode.leptonica.android.ReadFile;
 import com.googlecode.tesseract.android.ResultIterator;
 import com.googlecode.tesseract.android.TessBaseAPI;
 import com.googlecode.tesseract.android.TessBaseAPI.PageIteratorLevel;
+
+import org.opencv.android.Utils;
+import org.opencv.core.CvType;
+import org.opencv.core.Mat;
+
 /**
  * Class to send OCR requests to the OCR engine in a separate thread, send a success/failure message,
  * and dismiss the indeterminate progress dialog box. Used for non-continuous mode OCR only.
@@ -39,6 +44,8 @@ final class OcrRecognizeAsyncTask extends AsyncTask<Void, Void, Boolean> {
   //  private static final boolean PERFORM_FISHER_THRESHOLDING = false; 
   //  private static final boolean PERFORM_OTSU_THRESHOLDING = false; 
   //  private static final boolean PERFORM_SOBEL_THRESHOLDING = false; 
+
+  static{ System.loadLibrary("opencv_java3"); }
 
   private CaptureActivity activity;
   private TessBaseAPI baseApi;
@@ -60,6 +67,11 @@ final class OcrRecognizeAsyncTask extends AsyncTask<Void, Void, Boolean> {
   protected Boolean doInBackground(Void... arg0) {
     long start = System.currentTimeMillis();
     Bitmap bitmap = activity.getCameraManager().buildLuminanceSource(data, width, height).renderCroppedGreyscaleBitmap();
+
+    //尝试用OpenCV变换
+    Mat src = new Mat(bitmap.getHeight(),bitmap.getWidth(), CvType.CV_8UC4);
+    Utils.bitmapToMat(bitmap, src);
+
     String textResult;
 
     //      if (PERFORM_FISHER_THRESHOLDING) {

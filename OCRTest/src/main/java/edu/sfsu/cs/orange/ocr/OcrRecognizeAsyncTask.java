@@ -34,6 +34,15 @@ import com.googlecode.tesseract.android.TessBaseAPI.PageIteratorLevel;
 import org.opencv.android.Utils;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
+import org.opencv.core.Point;
+import org.opencv.core.Size;
+import org.opencv.imgcodecs.Imgcodecs;
+import org.opencv.imgproc.Imgproc;
+
+import static org.opencv.imgproc.Imgproc.COLOR_BGR2GRAY;
+import static org.opencv.imgproc.Imgproc.MORPH_RECT;
+import static org.opencv.imgproc.Imgproc.THRESH_BINARY;
+import static org.opencv.imgproc.Imgproc.THRESH_OTSU;
 
 /**
  * Class to send OCR requests to the OCR engine in a separate thread, send a success/failure message,
@@ -68,9 +77,31 @@ final class OcrRecognizeAsyncTask extends AsyncTask<Void, Void, Boolean> {
     long start = System.currentTimeMillis();
     Bitmap bitmap = activity.getCameraManager().buildLuminanceSource(data, width, height).renderCroppedGreyscaleBitmap();
 
-    //尝试用OpenCV变换
-    Mat src = new Mat(bitmap.getHeight(),bitmap.getWidth(), CvType.CV_8UC4);
-    Utils.bitmapToMat(bitmap, src);
+//    //尝试用OpenCV变换
+//    Mat src = new Mat(bitmap.getHeight(),bitmap.getWidth(), CvType.CV_8UC4);
+//    Utils.bitmapToMat(bitmap, src);
+//    Imgcodecs.imwrite("/sdcard/src.png",src);
+//
+//    Mat gray = new Mat();
+//    Imgproc.cvtColor(src,gray,COLOR_BGR2GRAY);
+//
+//    Mat sobel = new Mat();
+//    Imgproc.Sobel(gray,sobel,0,1,0,3);
+//
+//    Mat threshold = new Mat();
+//    Imgproc.threshold(sobel,threshold,0,255,THRESH_BINARY+THRESH_OTSU);
+//
+//    Mat element1 = Imgproc.getStructuringElement(MORPH_RECT,new Size(30,9));
+//    Mat element2 = Imgproc.getStructuringElement(MORPH_RECT,new Size(24,6));
+//    Mat dialation = new Mat();
+//    Imgproc.dilate(threshold,dialation,element2,new Point(-1,-1),1);
+//
+//    Mat erosion = new Mat();
+//    Imgproc.erode(dialation,erosion,element1,new Point(-1,-1),1);
+//
+//    Mat dilation2 = new Mat();
+//    Imgproc.dilate(erosion,dilation2,element2,new Point(-1,-1),3);
+//    Imgcodecs.imwrite("/sdcard/dilation2.png",dilation2);
 
     String textResult;
 

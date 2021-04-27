@@ -82,11 +82,11 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
   // Note: These constants will be overridden by any default values defined in preferences.xml.
   
   /** ISO 639-3 language code indicating the default recognition language. */
-  public static final String DEFAULT_SOURCE_LANGUAGE_CODE = "chi_sim";
+  public static final String DEFAULT_SOURCE_LANGUAGE_CODE = "eng";
   
   /** ISO 639-1 language code indicating the default target language for translation. */
-  public static final String DEFAULT_TARGET_LANGUAGE_CODE = "chi_sim";
-  
+  public static final String DEFAULT_TARGET_LANGUAGE_CODE = "eng";
+
   /** The default online machine translation service to use. */
   public static final String DEFAULT_TRANSLATOR = "Google Translate";
   

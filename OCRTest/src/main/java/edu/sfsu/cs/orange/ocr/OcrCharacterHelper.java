@@ -208,7 +208,7 @@ public class OcrCharacterHelper {
     else if (languageCode.equals("ben")) { return ""; } // Bengali
     else if (languageCode.equals("bul")) { return ""; } // Bulgarian
     else if (languageCode.equals("cat")) { return ""; } // Catalan
-    else if (languageCode.equals("chi_sim")) { return "1234567890"; } // Chinese (Simplified)
+    else if (languageCode.equals("chi_sim")) { return "1234567890度"; } // Chinese (Simplified)
     else if (languageCode.equals("chi_tra")) { return ""; } // Chinese (Traditional)
     else if (languageCode.equals("hrv")) { return ""; } // Croatian
     else if (languageCode.equals("ces")) { return ""; } // Czech

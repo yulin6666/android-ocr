@@ -104,6 +104,8 @@ final class OcrRecognizeAsyncTask extends AsyncTask<Void, Void, Boolean> {
 //    Imgcodecs.imwrite("/sdcard/dilation2.png",dilation2);
 
     String textResult;
+    String needResult="";
+
 
     //      if (PERFORM_FISHER_THRESHOLDING) {
     //        Pix thresholdedImage = Thresholder.fisherAdaptiveThreshold(ReadFile.readBitmap(bitmap), 48, 48, 0.1F, 2.5F);
@@ -138,19 +140,31 @@ final class OcrRecognizeAsyncTask extends AsyncTask<Void, Void, Boolean> {
       ocrResult.setWordBoundingBoxes(baseApi.getWords().getBoxRects());
       ocrResult.setStripBoundingBoxes(baseApi.getStrips().getBoxRects());
 
+      int i = 0;
       // Iterate through the results.
       final ResultIterator iterator = baseApi.getResultIterator();
       int[] lastBoundingBox;
       ArrayList<Rect> charBoxes = new ArrayList<Rect>();
       iterator.begin();
       do {
-          lastBoundingBox = iterator.getBoundingBox(PageIteratorLevel.RIL_SYMBOL);
-          String result = iterator.getUTF8Text(PageIteratorLevel.RIL_SYMBOL);
-          Log.e("yulin","msg:"+result);
+          lastBoundingBox = iterator.getBoundingBox(PageIteratorLevel.RIL_WORD);
+          String result = iterator.getUTF8Text(PageIteratorLevel.RIL_WORD);
+          if(result == null || result.equals("")) {
+            continue;
+          }else{
+            Log.e("yulin","msg:"+result);
+            if(i == 0) {//整数部分
+              needResult = result;
+            }else if(i==1){//小数部分
+              needResult+=".";
+              needResult += result;
+            }
+            i++;
+          }
           Rect lastRectBox = new Rect(lastBoundingBox[0], lastBoundingBox[1],
                   lastBoundingBox[2], lastBoundingBox[3]);
           charBoxes.add(lastRectBox);
-      } while (iterator.next(PageIteratorLevel.RIL_SYMBOL));
+      } while (iterator.next(PageIteratorLevel.RIL_WORD));
       iterator.delete();
       ocrResult.setCharacterBoundingBoxes(charBoxes);
 
@@ -167,7 +181,7 @@ final class OcrRecognizeAsyncTask extends AsyncTask<Void, Void, Boolean> {
     }
     timeRequired = System.currentTimeMillis() - start;
     ocrResult.setBitmap(bitmap);
-    ocrResult.setText(textResult);
+    ocrResult.setText(needResult);
     ocrResult.setRecognitionTimeRequired(timeRequired);
     return true;
   }

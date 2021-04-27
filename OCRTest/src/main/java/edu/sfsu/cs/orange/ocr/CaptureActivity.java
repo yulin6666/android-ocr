@@ -112,7 +112,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
   public static final boolean DEFAULT_TOGGLE_REVERSED_IMAGE = false;
   
   /** Whether to enable the use of online translation services be default. */
-  public static final boolean DEFAULT_TOGGLE_TRANSLATION = true;
+  public static final boolean DEFAULT_TOGGLE_TRANSLATION = false;
   
   /** Whether the light should be initially activated by default. */
   public static final boolean DEFAULT_TOGGLE_LIGHT = false;
@@ -748,8 +748,6 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     }
 
     // Display the recognized text
-    TextView sourceLanguageTextView = (TextView) findViewById(R.id.source_language_text_view);
-    sourceLanguageTextView.setText(sourceLanguageReadable);
     TextView ocrResultTextView = (TextView) findViewById(R.id.ocr_result_text_view);
     ocrResultTextView.setText(ocrResult.getText());
     // Crudely scale betweeen 22 and 32 -- bigger font for shorter text
@@ -759,28 +757,29 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     TextView translationLanguageLabelTextView = (TextView) findViewById(R.id.translation_language_label_text_view);
     TextView translationLanguageTextView = (TextView) findViewById(R.id.translation_language_text_view);
     TextView translationTextView = (TextView) findViewById(R.id.translation_text_view);
-    if (isTranslationActive) {
-      // Handle translation text fields
-      translationLanguageLabelTextView.setVisibility(View.VISIBLE);
-      translationLanguageTextView.setText(targetLanguageReadable);
-      translationLanguageTextView.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL), Typeface.NORMAL);
-      translationLanguageTextView.setVisibility(View.VISIBLE);
-
-      // Activate/re-activate the indeterminate progress indicator
-      translationTextView.setVisibility(View.GONE);
-      progressView.setVisibility(View.VISIBLE);
-      setProgressBarVisibility(true);
-      
-      // Get the translation asynchronously
-      new TranslateAsyncTask(this, sourceLanguageCodeTranslation, targetLanguageCodeTranslation, 
-          ocrResult.getText()).execute();
-    } else {
+//    if (isTranslationActive) {
+//      // Handle translation text fields
+//      translationLanguageLabelTextView.setVisibility(View.VISIBLE);
+//      translationLanguageTextView.setText(targetLanguageReadable);
+//      translationLanguageTextView.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL), Typeface.NORMAL);
+//      translationLanguageTextView.setVisibility(View.VISIBLE);
+//
+//      // Activate/re-activate the indeterminate progress indicator
+//      translationTextView.setVisibility(View.GONE);
+//      progressView.setVisibility(View.VISIBLE);
+//      setProgressBarVisibility(true);
+//
+//      // Get the translation asynchronously
+//      new TranslateAsyncTask(this, sourceLanguageCodeTranslation, targetLanguageCodeTranslation,
+//          ocrResult.getText()).execute();
+//    }
+//    else {
       translationLanguageLabelTextView.setVisibility(View.GONE);
       translationLanguageTextView.setVisibility(View.GONE);
       translationTextView.setVisibility(View.GONE);
       progressView.setVisibility(View.GONE);
       setProgressBarVisibility(false);
-    }
+//    }
     return true;
   }
   

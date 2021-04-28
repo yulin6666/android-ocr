@@ -140,31 +140,49 @@ final class OcrRecognizeAsyncTask extends AsyncTask<Void, Void, Boolean> {
       ocrResult.setWordBoundingBoxes(baseApi.getWords().getBoxRects());
       ocrResult.setStripBoundingBoxes(baseApi.getStrips().getBoxRects());
 
-      int i = 0;
+
+      Log.e("yulin","wordConfidences size:"+baseApi.wordConfidences().length+",meanConfidence:"+baseApi.meanConfidence());
+
       // Iterate through the results.
       final ResultIterator iterator = baseApi.getResultIterator();
       int[] lastBoundingBox;
       ArrayList<Rect> charBoxes = new ArrayList<Rect>();
       iterator.begin();
+      int i = 0;
+      String[] words = new String[20];
+      boolean find = false;
       do {
           lastBoundingBox = iterator.getBoundingBox(PageIteratorLevel.RIL_WORD);
-          String result = iterator.getUTF8Text(PageIteratorLevel.RIL_WORD);
-          if(result == null || result.equals("")) {
-            continue;
-          }else{
-            Log.e("yulin","msg:"+result);
-            if(i == 0) {//整数部分
-              needResult = result;
-            }else if(i==1){//小数部分
-              needResult+=".";
-              needResult += result;
-            }
-            i++;
+          String word = iterator.getUTF8Text(PageIteratorLevel.RIL_WORD);
+          words[i]=word;
+
+          Log.e("yulin","word:"+word);
+
+          if(word.equals("度")&& !find){//找到第一个度
+            Log.e("yulin","找到了第一个度");
+              int j = i -1;
+              Log.e("yulin","前一个置信度:"+baseApi.wordConfidences()[j]+",值:"+words[j]);
+              int k = j -1;
+              Log.e("yulin","前前一个置信度:"+baseApi.wordConfidences()[k]+",值:"+words[k]);
+              if(baseApi.wordConfidences()[j] > 50 && baseApi.wordConfidences()[k] > 50){
+                needResult = words[k];
+                needResult += ".";
+                needResult += words[j];
+              }else{
+                return false;
+              }
+              find = true;
           }
+          i++;
+
           Rect lastRectBox = new Rect(lastBoundingBox[0], lastBoundingBox[1],
                   lastBoundingBox[2], lastBoundingBox[3]);
           charBoxes.add(lastRectBox);
       } while (iterator.next(PageIteratorLevel.RIL_WORD));
+
+      if(!find){
+        return false;
+      }
       iterator.delete();
       ocrResult.setCharacterBoundingBoxes(charBoxes);
 

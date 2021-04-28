@@ -117,7 +117,7 @@ final class CaptureActivityHandler extends Handler {
       case R.id.ocr_decode_failed:
         state = State.PREVIEW;
         activity.setShutterButtonClickable(true);
-        Toast toast = Toast.makeText(activity.getBaseContext(), "OCR failed. Please try again.", Toast.LENGTH_SHORT);
+        Toast toast = Toast.makeText(activity.getBaseContext(), "结果不准确，请靠近探测区域", Toast.LENGTH_SHORT);
         toast.setGravity(Gravity.TOP, 0, 0);
         toast.show();
         break;
